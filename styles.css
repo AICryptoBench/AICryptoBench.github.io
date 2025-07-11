@@ -1,0 +1,355 @@
+/* Typography & Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fafafa;
+  font-size: 18px; /* further increase base font size */
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Make all main section images fully responsive */
+.section img {
+  width: 100%; /* grow and shrink with container */
+  height: auto;
+}
+
+/* Preserve fixed size for navbar logo */
+.logo img {
+  width: auto;
+  height: 48px;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .logo img {
+    height: 32px; /* slightly smaller on mobile */
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #111;
+}
+
+p {
+  margin-bottom: 1rem;
+}
+
+figure {
+  margin: 0;
+}
+
+figcaption {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Navbar */
+.navbar {
+  background-color: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #111;
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.logo img {
+  height: 48px;
+  margin-right: 0.5rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: #007bff;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero-img {
+  width: 100%;
+  height: auto;
+  /* Limit hero image height for better initial view */
+  max-height: 80vh;
+  object-fit: contain;
+}
+
+/* Hero Heading */
+.hero-heading {
+  text-align: center;
+  padding: 4rem 1rem 2rem;
+}
+
+.hero-heading h1 {
+  font-size: 3rem; /* larger main heading */
+  margin-bottom: 0.5rem;
+  color: #111;
+}
+
+.hero-tagline {
+  font-size: 1.35rem;
+  color: #444;
+  margin-bottom: 0.75rem;
+}
+
+.hero-authors {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.25rem 0.5rem;
+  text-align: center;
+}
+
+.hero-authors .author {
+  white-space: nowrap;
+}
+
+.hero-authors .author::after {
+  content: ", ";
+}
+
+.hero-authors .author:last-child::after {
+  content: "";
+}
+
+/* Resource Links */
+.hero-links {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.resource-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: #222;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  font-size: 0.9rem;
+}
+
+.resource-link img {
+  width: 32px;
+  height: 32px;
+}
+
+.resource-link:hover {
+  background-color: #444;
+}
+
+.hero-heading p {
+  font-size: 1.25rem;
+  color: #555;
+}
+
+/* Sections */
+.section {
+  padding: 3rem 0;
+  background-color: #fff;
+}
+
+.section:nth-of-type(even) {
+  background-color: #f5f7fb;
+}
+
+.task-sample figure,
+.heatmap figure,
+.results figure {
+  margin-top: 1.5rem;
+}
+
+/* Footer */
+.footer {
+  background-color: #111;
+  color: #eee;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.footer a {
+  color: #7ab6ff;
+}
+
+/* Leaderboard */
+
+/* Remove old control styles if any */
+
+#leaderboard-table thead th[data-metric] {
+  cursor: pointer;
+  position: relative;
+}
+
+#leaderboard-table thead th.sorted-desc::after,
+#leaderboard-table thead th.sorted-asc::after {
+  content: "";
+  border: 6px solid transparent;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#leaderboard-table thead th.sorted-desc::after {
+  border-top-color: #333;
+}
+
+#leaderboard-table thead th.sorted-asc::after {
+  border-bottom-color: #333;
+}
+
+#leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+#leaderboard-table th,
+#leaderboard-table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+}
+
+#leaderboard-table th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
+
+#leaderboard-table tbody tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+#leaderboard-table tbody tr:hover {
+  background-color: #f1f7ff;
+}
+
+/* CTF Matrix */
+.matrix-scroll {
+  overflow: auto;
+  padding-bottom: 1rem;
+  max-height: 500px;
+  border: 1px solid #ddd;
+}
+
+#ctf-matrix-table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  table-layout: fixed;
+}
+
+#ctf-matrix-table th,
+#ctf-matrix-table td {
+  border: 1px solid #ddd;
+  padding: 2px;
+  text-align: center;
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
+  height: 32px;
+  line-height: 32px;
+}
+
+#ctf-matrix-table th {
+  background-color: #eee;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.matrix-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.matrix-model {
+  font-weight: 600;
+  background-color: #f9f9f9;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+  white-space: normal;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+  padding: 4px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 1.75rem;
+  }
+  .hero-overlay p {
+    font-size: 1rem;
+  }
+  nav ul {
+    gap: 0.5rem;
+  }
+} 

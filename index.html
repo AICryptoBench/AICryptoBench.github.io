@@ -1,9 +1,383 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>AICrypto Bench</title>
-  </head>
-  <body>
-    <h1>Coming soon...</h1>
-  </body>
-</html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AICrypto</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="pics/02-icon.svg">
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#hero" class="logo">
+        <img src="pics/02-icon.svg" alt="AICrypto Icon" />
+        <span>AICrypto</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#mcq-sample">Samples</a></li>
+          <li><a href="#future">Future Work</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="hero-heading">
+      <h1>AICrypto</h1>
+      <p class="hero-tagline">A Comprehensive Benchmark for Evaluating Cryptography Capabilities of Large Language Models</p>
+      <div class="hero-authors">
+        <span class="author">Yu&nbsp;Wang*</span>
+        <span class="author">Yijian&nbsp;Liu*</span>
+        <span class="author">Liheng&nbsp;Ji*</span>
+        <span class="author">Han&nbsp;Luo*</span>
+        <span class="author">Wenjie&nbsp;Li*</span>
+        <span class="author">Xiaofei&nbsp;Zhou†</span>
+        <span class="author">Chiyun&nbsp;Feng</span>
+        <span class="author">Puji&nbsp;Wang</span>
+        <span class="author">Yuhan&nbsp;Cao</span>
+        <span class="author">Geyuan&nbsp;Zhang</span>
+        <span class="author">Xiaojian&nbsp;Li</span>
+        <span class="author">Rongwu&nbsp;Xu</span>
+        <span class="author">Yilei&nbsp;Chen†</span>
+        <span class="author">Tianxing&nbsp;He†</span>
+      </div>
+
+      <!-- Resource Links -->
+      <div class="hero-links">
+        <a class="resource-link" href="https://arxiv.org/abs/0000.00000" target="_blank" rel="noopener">
+          <img src="pics/arxiv-logo.svg" alt="ArXiv Logo" />
+          <span>Paper</span>
+        </a>
+        <a class="resource-link" href="https://github.com/username/AICrypto" target="_blank" rel="noopener">
+          <img src="pics/github-mark-white.svg" alt="GitHub Logo" />
+          <span>Code</span>
+        </a>
+        <a class="resource-link" href="https://huggingface.co/datasets/username/AICrypto" target="_blank" rel="noopener">
+          <img src="pics/huggingface_logo-noborder.svg" alt="Hugging Face Logo" />
+          <span>Dataset</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract / Intro -->
+  <section id="intro" class="section intro">
+    <div class="container">
+      <h2>Abstract</h2>
+      <p>
+        Large language models (LLMs) have demonstrated remarkable capabilities across a variety of domains. However, their applications in cryptography, which serves as a foundational pillar of cybersecurity, remain largely unexplored. To address this gap, we propose <strong>AICrypto</strong>, the first comprehensive benchmark designed to evaluate the cryptographic capabilities of LLMs. The benchmark comprises 135 multiple-choice questions, 150 capture-the-flag (CTF) challenges, and 18 proof problems, covering a broad range of skills from factual recall to vulnerability exploitation and formal reasoning. All tasks are carefully reviewed or constructed by cryptography experts to ensure correctness and rigor. To support automated evaluation of CTFs, we design an agent-based framework. To gain deeper insight into the current state of cryptographic proficiency in LLMs, we introduce human expert performance baselines for comparison across all task types. Our evaluation of 17 leading LLMs reveals that state-of-the-art models match or even surpass human experts in memorizing cryptographic concepts, exploiting common vulnerabilities, and routine proofs. However, they still lack a deep understanding of abstract mathematical concepts and struggle with tasks that require multi-step reasoning and dynamic analysis. We hope this work could provide insights for future research on LLMs in cryptographic applications.
+      </p>
+    </div>
+  </section>
+
+  <!-- Leaderboard Section -->
+  <section id="leaderboard" class="section leaderboard">
+    <div class="container">
+      <h2>Leaderboard</h2>
+      <table id="leaderboard-table" class="sortable">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th data-metric="name">Model</th>
+            <th data-metric="mcq">MCQ</th>
+            <th data-metric="ctf">CTF</th>
+            <th data-metric="proof">Proof</th>
+            <th data-metric="total" class="sorted-desc">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Dynamic rows will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Overview Section -->
+  <section id="overview" class="section">
+    <div class="container">
+      <h2>Benchmark Overview</h2>
+      <figure>
+        <p>
+          An overview of AICrypto is shown in Figure 1. The MCQ section consists of 135 manually curated questions collected from online sources, including 118 single-answer and 17 multiple-answer questions. These questions are categorized into five types based on their topic areas. The CTF section includes 150 problems spanning 8 categories, with 137 drawn from post-2023 competitions to ensure recency, and the remaining 13 are from earlier contests. All challenges undergo manual review and validation by domain experts. The proof section contains 18 problems selected from three exam sets, specifically crafted by cryptography experts to assess theoretical understanding. For each task type, we define a scoring metric that assigns a full score of 100 point per task, resulting in a maximum total score of 300 points. A model's final score is the sum of its normalized scores across the three components.
+        </p>
+        <img src="pics/01-overview.png" alt="Benchmark Overview Diagram" />
+        <figcaption>Fig1. High-level overview of the AICrypto benchmark.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Overall Results -->
+  <section id="results" class="section results">
+    <div class="container">
+      <h2>Overall Model Performance</h2>
+      <p>
+
+        Figure 2 presents the overall performance of LLMs compared to human experts on AICrypto. The results reveal three distinct performance tiers among the models and highlight substantial variation in their proficiency across different cryptographic tasks. Top-tier models, particularly o3-high, gemini-2.5-pro-preview, and o3, demonstrate strong performance on MCQs and proof problems that require cryptographic knowledge and formal reasoning. However, their performance drops sharply on CTF challenges, indicating that even the most advanced models have yet to master the full spectrum of cryptographic problem-solving. Overall, reasoning models outperform general models.
+      </p>
+      <figure>
+        <img src="pics/03-overall_performance.png" alt="Overall Model Performance Chart" />
+        <figcaption>Fig2. Aggregate performance of various LLMs across all tasks.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- MCQ Sample -->
+  <section id="mcq-sample" class="section task-sample">
+    <div class="container">
+      <h2>Multiple-Choice Question Sample</h2>
+      <figure>
+        <img src="pics/04-mcq_example.png" alt="MCQ Example" />
+        <figcaption>Fig3. An example multiple-choice question from the benchmark.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- MCQ Heatmap -->
+  <section id="mcq-heatmap" class="section heatmap">
+    <div class="container">
+      <h2>MCQ Categorized Accuracy</h2>
+      <figure>
+        <img src="pics/05-mcq_accuracy_heatmap.png" alt="MCQ Accuracy Heatmap" />
+        <figcaption>Fig4. Accuracy heatmap of MCQ performance categorized by topic.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTF Sample -->
+  <section id="ctf-sample" class="section task-sample">
+    <div class="container">
+      <h2>CTF Challenge Sample</h2>
+      <figure>
+        <img src="pics/06-ctf_example.png" alt="CTF Example" />
+        <figcaption>Fig5. An example capture-the-flag challenge from the benchmark.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTF Solution Sample -->
+  <section id="ctf-solution" class="section task-sample">
+    <div class="container">
+      <h2>How Models Solve CTF Challenges</h2>
+      <figure>
+        <img src="pics/07-llm_solve_ctf_example.png" alt="LLM Solving CTF Example" />
+        <figcaption>Fig6. Illustration of an LLM solving a CTF task.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTF Heatmap -->
+  <section id="ctf-heatmap" class="section heatmap">
+    <div class="container">
+      <h2>CTF Categorized Success Rates</h2>
+      <figure>
+        <img src="pics/08-ctf_category_success_heatmap.png" alt="CTF Success Heatmap" />
+        <figcaption>Fig7. Success rates of LLMs on CTF tasks across different categories.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTF Challenge Matrix -->
+  <section id="ctf-matrix" class="section ctf-matrix">
+    <div class="container">
+      <h2>CTF Challenge Matrix</h2>
+      <p>Each cell shows whether a model solved a specific CTF challenge (flag = solved).</p>
+      <div class="matrix-scroll">
+        <table id="ctf-matrix-table">
+          <!-- Dynamic content -->
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof Sample -->
+  <section id="proof-sample" class="section task-sample">
+    <div class="container">
+      <h2>Proof Problem Sample</h2>
+      <figure>
+        <img src="pics/09-proof_example.png" alt="Proof Example" />
+        <figcaption>Fig8. An example proof problem from the benchmark.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Proof Solution Sample -->
+  <section id="proof-solution" class="section task-sample">
+    <div class="container">
+      <h2>How Models Tackle Proof Problems</h2>
+      <figure>
+        <img src="pics/10-model_proof_example.png" alt="Model Proof Example" />
+        <figcaption>Fig9. Visualization of an LLM reasoning through a proof task.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Proof Heatmap -->
+  <section id="proof-heatmap" class="section heatmap">
+    <div class="container">
+      <h2>Proof Categorized Scores</h2>
+      <figure>
+        <img src="pics/11-proof_category_rating_heatmap.png" alt="Proof Heatmap" />
+        <figcaption>Fig10. Performance heatmap of proof problems by category.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Future Work -->
+  <section id="future" class="section future-work">
+    <div class="container">
+      <h2>LLM is investigating why eprint.iacr.org/2024/555 has a bug</h2>
+      <p>Do Not Disturb</p>
+   
+      <figure>
+        <img src="pics/00-main.png" alt="AICrypto promotional comic" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- Contact / Footer -->
+  <footer id="contact" class="footer">
+    <div class="container footer-inner">
+      <p>For inquiries, please contact <a href="mailto:yuuwwang@example.com">yuuwwang@gmail.com</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    async function initLeaderboard() {
+      try {
+        const response = await fetch('leader.json');
+        const data = await response.json();
+        const tbody = document.querySelector('#leaderboard-table tbody');
+        const headers = document.querySelectorAll('#leaderboard-table thead th[data-metric]');
+
+        let currentMetric = 'total';
+        let ascending = false; // default descending
+
+        function renderTable() {
+          const rowsArr = Object.entries(data).map(([name, scores]) => ({ name, ...scores }));
+
+          rowsArr.sort((a, b) => {
+            if (currentMetric === 'name') {
+              return ascending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+            }
+            return ascending ? a[currentMetric] - b[currentMetric] : b[currentMetric] - a[currentMetric];
+          });
+
+          tbody.innerHTML = rowsArr.map((row, idx) => `
+            <tr>
+              <td>${idx + 1}</td>
+              <td>${row.name}</td>
+              <td>${row.mcq.toFixed(3)}</td>
+              <td>${row.ctf.toFixed(3)}</td>
+              <td>${row.proof.toFixed(3)}</td>
+              <td>${row.total.toFixed(3)}</td>
+            </tr>
+          `).join('');
+
+          // update header classes
+          headers.forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+          const activeHeader = Array.from(headers).find(h => h.dataset.metric === currentMetric);
+          if (activeHeader) activeHeader.classList.add(ascending ? 'sorted-asc' : 'sorted-desc');
+        }
+
+        // Attach click listeners
+        headers.forEach(header => {
+          header.style.cursor = 'pointer';
+          header.addEventListener('click', () => {
+            const metric = header.dataset.metric;
+            if (metric === currentMetric) {
+              // toggle direction
+              ascending = !ascending;
+            } else {
+              currentMetric = metric;
+              ascending = metric === 'name'; // names sort ascending default
+            }
+            renderTable();
+          });
+        });
+
+        // Initial render
+        renderTable();
+      } catch (err) {
+        console.error('Failed to load leaderboard:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initLeaderboard);
+
+    /* CTF Matrix Script */
+    async function initCTFMatrix() {
+      const models = Object.keys(await (await fetch('leader.json')).json());
+
+      async function fetchModelResults(model) {
+        const path = `CTF/ctf_${model}_task_results.json`;
+        try {
+          const res = await fetch(path);
+          if (!res.ok) throw new Error('not found');
+          return res.json();
+        } catch {
+          console.warn('Missing CTF result for', model);
+          return null;
+        }
+      }
+
+      // Fetch all results in parallel
+      const modelData = await Promise.all(models.map(async m => ({
+        model: m,
+        results: await fetchModelResults(m)
+      })));
+
+      // Determine challenges list from first non-null result
+      const firstValid = modelData.find(md => md.results);
+      if (!firstValid) return;
+      const challenges = Object.keys(firstValid.results);
+
+      // Compute solved counts and filter out models without data
+      const validModels = modelData.filter(md => md.results).map(md => {
+        const solved = Object.values(md.results).filter(Boolean).length;
+        return { ...md, solved };
+      });
+
+      // Sort by solved descending
+      validModels.sort((a, b) => b.solved - a.solved);
+
+      // Build header row with challenge names (shortened to last path component)
+      const table = document.getElementById('ctf-matrix-table');
+      const headerRow = document.createElement('tr');
+      headerRow.innerHTML = `<th>Model</th>` + challenges.map(ch => {
+        const parts = ch.split('/');
+        const category = parts[2] || '';
+        const chalName = parts[parts.length - 1];
+        const code = `${category.split('-')[0]}-${chalName.split('-')[0]}`; // e.g., 01-08
+        return `<th title="${ch}">${code}</th>`;
+      }).join('');
+      table.appendChild(headerRow);
+
+      // Add model rows
+      for (const { model, results } of validModels) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td class="matrix-model">${model}</td>` +
+          challenges.map(ch => {
+            const val = results[ch];
+            const icon = val ? 'pics/Flag.png' : 'pics/fail45.svg';
+            const alt = val ? 'flag' : 'fail';
+            return `<td><img src="${icon}" alt="${alt}" class="matrix-icon" /></td>`;
+          }).join('');
+        table.appendChild(row);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCTFMatrix);
+
+  </script>
+</body>
+</html> 
