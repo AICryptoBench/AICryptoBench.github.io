@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AICrypto</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="pics/logo.jpg">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        macros: {
+          textbf: ['\\mathbf{#1}', 1],
+          emph: ['\\mathit{#1}', 1],
+          textit: ['\\mathit{#1}', 1],
+          qed: '\\square'
+        }
+      },
+      options: {
+        renderActions: {
+          addMenu: [0, '', '']
+        }
+      },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/crypto-js.js"></script>
+  <script>
+    // LaTeX rendering function
+    function renderLatexInCodeBlocks() {
+      const codeBlocks = document.querySelectorAll('code.language-latex');
+      console.log('Found', codeBlocks.length, 'LaTeX code blocks');
+      
+      codeBlocks.forEach((block, index) => {
+        console.log('Processing LaTeX block', index);
+        const mathDiv = document.createElement('div');
+        mathDiv.className = 'latex-content';
+        mathDiv.textContent = block.textContent;
+        
+        // Replace the pre element (parent of code)
+        const preElement = block.parentElement;
+        preElement.parentElement.replaceChild(mathDiv, preElement);
+      });
+      
+      // Re-render MathJax after DOM changes
+      if (window.MathJax) {
+        console.log('Triggering MathJax rendering...');
+        window.MathJax.typesetPromise().then(() => {
+          console.log('MathJax rendering completed');
+        }).catch((err) => {
+          console.error('MathJax error:', err);
+        });
+      } else {
+        console.error('MathJax not found');
+      }
+    }
+    
+    // Multiple attempts to ensure rendering
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('DOM loaded, attempting LaTeX rendering...');
+      setTimeout(renderLatexInCodeBlocks, 500);
+    });
+    
+    window.addEventListener('load', function() {
+      console.log('Window loaded, attempting LaTeX rendering...');
+      setTimeout(renderLatexInCodeBlocks, 1000);
+    });
+  </script>
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#hero" class="logo">
+        <img src="pics/logo.jpg" alt="AICrypto Icon" />
+        <span>AICrypto</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#results">Results</a></li>
+          <li><a href="#mcq-sample">Samples</a></li>
+          <li><a href="#future">Future Work</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="hero">
+    <div class="hero-heading">
+      <h1>AICrypto</h1>
+      <p class="hero-tagline">A Comprehensive Benchmark for Evaluating Cryptography Capabilities of Large Language Models</p>
+      <div class="hero-authors">
+        <span class="author">Yu&nbsp;Wang<sup>*1,2,3</sup></span>
+        <span class="author">Yijian&nbsp;Liu<sup>*1,2</sup></span>
+        <span class="author">Liheng&nbsp;Ji<sup>*4,3</sup></span>
+        <span class="author">Han&nbsp;Luo<sup>*4</sup></span>
+        <span class="author">Wenjie&nbsp;Li<sup>*4,3</sup></span>
+        <span class="author">Xiaofei&nbsp;Zhou<sup>†1,2</sup></span>
+        <span class="author">Chiyun&nbsp;Feng<sup>2</sup></span>
+        <span class="author">Puji&nbsp;Wang<sup>2</sup></span>
+        <span class="author">Yuhan&nbsp;Cao<sup>3</sup></span>
+        <span class="author">Geyuan&nbsp;Zhang<sup>1,2</sup></span>
+        <span class="author">Xiaojian&nbsp;Li<sup>5,3</sup></span>
+        <span class="author">Rongwu&nbsp;Xu<sup>4,3</sup></span>
+        <span class="author">Yilei&nbsp;Chen<sup>†4,3</sup></span>
+        <span class="author">Tianxing&nbsp;He<sup>†4,3</sup></span>
+      </div>
+      <div class="hero-affiliations">
+        <span><sup>1</sup>Institute of Information Engineering, Chinese Academy of Sciences, Beijing, China</span>
+        <span><sup>2</sup>School of Cyber Security, University of Chinese Academy of Sciences, Beijing, China</span>
+        <span><sup>3</sup>Shanghai Qi Zhi Institute</span>
+        <span><sup>4</sup>Institute for Interdisciplinary Information Sciences, Tsinghua University</span>
+        <span><sup>5</sup>College of AI, Tsinghua University</span>
+      </div>
+
+      <!-- Resource Links -->
+      <div class="hero-links">
+        <a class="resource-link" href="https://arxiv.org/abs/2507.09580" target="_blank" rel="noopener">
+          <img src="pics/arxiv-logo.svg" alt="ArXiv Logo" />
+          <span>Paper</span>
+        </a>
+        <a class="resource-link" href="https://github.com/username/AICrypto" target="_blank" rel="noopener">
+          <img src="pics/github-mark-white.svg" alt="GitHub Logo" />
+          <span>Code</span>
+        </a>
+        <a class="resource-link" href="https://huggingface.co/datasets/username/AICrypto" target="_blank" rel="noopener">
+          <img src="pics/huggingface_logo-noborder.svg" alt="Hugging Face Logo" />
+          <span>Dataset</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Section -->
+  <section id="news" class="section news">
+    <div class="container">
+      <h2>📢 News</h2>
+      <div class="news-item">
+        <p>
+          <strong>July 15, 2025 - 🚀 Coming Soon:</strong> We are currently making our best efforts to organize the dataset and evaluation framework. We plan to release the complete benchmark dataset and evaluation code as open source as soon as possible. We appreciate your patience and interest!
+
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abstract / Intro -->
+  <section id="intro" class="section intro">
+    <div class="container">
+      <h2>Abstract</h2>
+      <p>
+        Large language models (LLMs) have demonstrated remarkable capabilities across a variety of domains. However, their applications in cryptography, which serves as a foundational pillar of cybersecurity, remain largely unexplored. To address this gap, we propose <strong>AICrypto</strong>, the first comprehensive benchmark designed to evaluate the cryptographic capabilities of LLMs. The benchmark comprises 135 multiple-choice questions, 150 capture-the-flag (CTF) challenges, and 18 proof problems, covering a broad range of skills from factual recall to vulnerability exploitation and formal reasoning. All tasks are carefully reviewed or constructed by cryptography experts to ensure correctness and rigor. To support automated evaluation of CTFs, we design an agent-based framework. To gain deeper insight into the current state of cryptographic proficiency in LLMs, we introduce human expert performance baselines for comparison across all task types. Our evaluation of 17 leading LLMs reveals that state-of-the-art models match or even surpass human experts in memorizing cryptographic concepts, exploiting common vulnerabilities, and routine proofs. However, they still lack a deep understanding of abstract mathematical concepts and struggle with tasks that require multi-step reasoning and dynamic analysis. We hope this work could provide insights for future research on LLMs in cryptographic applications.
+      </p>
+    </div>
+  </section>
+
+  <!-- Leaderboard Section -->
+  <section id="leaderboard" class="section leaderboard">
+    <div class="container">
+      <h2>Leaderboard</h2>
+      <figure>
+        <div id="leaderboard-chart" style="width: 100%; height: 800px;"></div>
+        <figcaption>Fig1. Model performance leaderboard showing stacked scores across MCQ, CTF, and Proof tasks.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Overview Section -->
+  <section id="overview" class="section">
+    <div class="container">
+      <h2>Benchmark Overview</h2>
+      <figure>
+        <p>
+          An overview of AICrypto is shown in Figure 1. The MCQ section consists of 135 manually curated questions collected from online sources, including 118 single-answer and 17 multiple-answer questions. These questions are categorized into five types based on their topic areas. The CTF section includes 150 problems spanning 8 categories, with 137 drawn from post-2023 competitions to ensure recency, and the remaining 13 are from earlier contests. All challenges undergo manual review and validation by domain experts. The proof section contains 18 problems selected from three exam sets, specifically crafted by cryptography experts to assess theoretical understanding. For each task type, we define a scoring metric that assigns a full score of 100 point per task, resulting in a maximum total score of 300 points. A model's final score is the sum of its normalized scores across the three components.
+        </p>
+        <img src="pics/01-overview.png" alt="Benchmark Overview Diagram" />
+        <figcaption>Fig2. High-level overview of the AICrypto benchmark.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+
+  <!-- MCQ Sample -->
+  <section id="mcq-sample" class="section task-sample">
+    <div class="container">
+      <h2>Multiple-Choice Question Samples</h2>
+      <p>Here are some examples of multiple-choice questions from our benchmark that you can try. Feel free to test your cryptographic knowledge!</p>
+      <div id="mcq-quiz"></div>
+    </div>
+  </section>
+
+  <!-- MCQ Heatmap -->
+  <section id="mcq-heatmap" class="section heatmap">
+    <div class="container">
+
+      <h2>MCQ Categorized Accuracy</h2>
+      <p>
+        Figure 3 reports the accuracy of 17 LLMs and 3 human experts across 5 sub-categories on MCQs. The o3 model makes only 3 errors out of 135 questions, achieving an overall accuracy of 97.8% and perfect scores in both classic, symmetric and misc. o4-mini-high and o3-high follows closely, clustering at just below 96%. Even the model with the lowest score, doubao seed-1.6, maintains a solid 84.4%. In contrast, the best human expert peaks at 78.5% (106/135), while the median performance of LLMs surpasses that of humans by approximately 15 percentage points.
+        </p>
+        <figure>
+          <div id="mcq-heatmap-chart" style="width:100%;height:1000px;"></div>
+          <figcaption>Fig3. Accuracy heatmap of MCQ performance categorized by topic.</figcaption>
+        </figure>
+    </div>
+  </section>
+
+  <!-- CTF Sample -->
+  <section id="ctf-sample" class="section task-sample">
+    <div class="container">
+      <h2>CTF Challenge Samples</h2>
+      <p>Below are some capture-the-flag challenges from our benchmark. We invite you to explore these problems!</p>
+      
+      <div id="ctf-challenges"></div>
+    </div>
+  </section>
+
+  <!-- CTF Heatmap -->
+  <section id="ctf-heatmap" class="section heatmap">
+    <div class="container">
+      <h2>CTF Categorized Success Rates</h2>
+      <p>
+        Figure 7 shows a category-level successful rate heatmap for 17 LLMs and a panel of human experts on CTF challenges (human performance calculated from a subset of 100 challenges). Human solvers lead with an average success rate of 81.2%, while the best-performing models, gemini-2.5-pro-preview and o3-high, reach only 55.3% and 54.0% respectively. The second tier, including o3 and o4-mini-high, achieves 49.3% and 46.0% respectively. Performance drops steeply among the remaining models, all of which have a success rate below 35%. These results highlight a persistent 25–30 percentage point gap between top LLMs and human experts.
+      </p>
+      <figure>
+        <div id="ctf-heatmap-chart" style="width:100%;height:1000px;"></div>
+        <figcaption>Fig7. Success rates of LLMs on CTF tasks across different categories.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- CTF Challenge Matrix -->
+  <section id="ctf-matrix" class="section ctf-matrix">
+    <div class="container">
+      <h2>CTF Challenge Matrix</h2>
+      <p>Each cell shows whether a model solved a specific CTF challenge (flag = solved).</p>
+      <div class="matrix-scroll">
+        <table id="ctf-matrix-table">
+          <!-- Dynamic content -->
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Proof Problems Overview -->
+  <section id="proof-overview" class="section">
+    <div class="container">
+      <h2>Proof Problems</h2>
+      <p>
+        
+Proof problems are widely used in educational assessments, as they provide a deep evaluation of a student's understanding than multiple-choice questions. Solving these problems requires a strong grasp of cryptographic concepts and solid logical reasoning skills. We select three sets of exam papers, each curated by human experts and containing six questions, resulting in a total of 18 proof problems. These exams originate from cryptography courses offered at a top university in 2023, 2024, and 2025. These problems have never been publicly released online and are entirely authored by human experts, which helps to effectively prevent data contamination.
+
+</p>
+      <p>
+        As shown in Figure 2, the 18 problems span core topics in cryptography: the foundation of cryptography (including one-way functions and hardcore functions), pseudorandomness, encryptions and signatures . 
+      </p>
+    </div>
+  </section>
+
+  <!-- Proof Sample -->
+  <section id="proof-sample" class="section task-sample">
+    <div class="container">
+      <h2>Proof Problem Sample</h2>
+      <p>A problem from AICrypto:</p>
+      <pre class="code-scroll"><code class="language-latex">\textbf{Problem 2 (18 points)}
+
+Show that there is no universal hardcore bit. 
+In more detail, show that for every $n\in\mathbb{N}$, there is no deterministic function $h: \{0,1\}^n \to \{0,1\}$ such that for any polynomial $p()$, \emph{any} one-way function $f: \{0,1\}^n \to \{0,1\}^{p(n)}$, $h$ is a hardcore bit for $f$.</code></pre>
+    </div>
+  </section>
+
+  <!-- Proof Solution Sample -->
+  <section id="proof-solution" class="section task-sample">
+    <div class="container">
+      <h2>An Example of LLM Solving Proof Problems</h2>
+      <p>Proof generated by o3-high for the problem shown in above. This response receives full marks.</p>
+      <pre class="code-scroll"><code class="language-latex">Fix $n\in\mathbb{N}$ and a deterministic function
+$h:\{0,1\}^n\rightarrow\{0,1\}$.
+Assume that at least one length-preserving one-way function exists; let  
+\[
+g:\{0,1\}^n\longrightarrow\{0,1\}^{m(n)}
+\]
+be any such function, where $m$ is a polynomial.
+Define the polynomial $p(n)=m(n)+1$ and construct
+\[
+f:\{0,1\}^n\longrightarrow\{0,1\}^{p(n)},\qquad
+f(x)=(g(x),h(x)).
+\]
+
+\textbf{1.  $f$ is one-way.}
+Suppose, toward a contradiction, that a probabilistic polynomial-time
+inverter $\mathcal{I}$ exists such that
+\[
+\Pr_{x\leftarrow\{0,1\}^n}\bigl[\mathcal{I}(f(x))\in f^{-1}(f(x))\bigr]
+\ge\varepsilon(n)
+\]
+for a non-negligible $\varepsilon$.
+Construct an inverter $\mathcal{J}$ for $g$ as follows:
+
+\medskip
+\noindent
+\emph{On input $y\in\{0,1\}^{m(n)}$:}
+pick $b\!\leftarrow\!\{0,1\}$ uniformly and run
+$\mathcal{I}(y,b)$, obtaining $x'$.
+If $g(x')=y$, output $x'$; otherwise output $\bot$.
+
+\medskip
+Conditioned on choosing $b=h(x)$, the pair $(y,b)$ equals $f(x)$ for the
+unique preimage $x$, so $\mathcal{I}$ outputs that $x$ with probability
+at least $\varepsilon(n)$.  Since $\Pr[b=h(x)]=\tfrac12$,
+\[
+\Pr[\mathcal{J}\text{ inverts }g]\ge\tfrac12\,\varepsilon(n),
+\]
+which is still non-negligible.  This contradicts the one-wayness of
+$g$; hence $f$ is one-way.
+
+\textbf{2.  $h$ is not a hardcore bit for $f$.}
+Define the predictor
+$\mathcal{P}:\{0,1\}^{p(n)}\!\rightarrow\!\{0,1\}$ by
+$\mathcal{P}(y,b)=b$.
+For every $x$,
+$\mathcal{P}(f(x))=h(x)$, so
+\[
+\Pr_{x\leftarrow\{0,1\}^n}\bigl[\mathcal{P}(f(x))=h(x)\bigr]=1,
+\]
+yielding prediction advantage $1/2$, which is non-negligible.
+Thus $h$ fails to be a hardcore bit for $f$.
+
+\textbf{Conclusion.}
+Because the above construction works for \emph{every} deterministic
+$h:\{0,1\}^n\!\rightarrow\!\{0,1\}$, no universal hardcore bit exists. \qed</code></pre>
+    </div>
+  </section>
+
+  <!-- Proof Heatmap -->
+  <section id="proof-heatmap" class="section heatmap">
+    <div class="container">
+      <h2>Proof Categorized Scoring Rate</h2>
+      <p>
+        Figure 10 presents a category-level scoring rate heatmap that compares the performance of 17 LLMs with that of human experts on proof problems. The results show that human students maintain a slight advantage, with an average scoring rate of 88.1%. Among the evaluated models, the highest performing systems display strong capabilities, with gemini-2.5-pro-preview achieving 84.5% and o3-high reaching 84.2%, both approaching human-level performance. Nearly half of the models, specifically 8 out of 17, score below 60%.
+      </p>
+      <div id="proof-heatmap-chart" style="width: 100%; height: 600px; margin: 20px 0;"></div>
+      <p style="text-align: center; color: #666; margin-top: 10px;">
+        Fig10. Performance heatmap of proof problems by category. Human experts achieve 88.1% average score, while the best models reach 84.5% and 84.2%.
+      </p>
+    </div>
+  </section>
+
+  <!-- Future Work -->
+  <section id="future" class="section future-work">
+    <div class="container">
+      <h2>LLM is investigating why eprint.iacr.org/2024/555 has a bug</h2>
+      <p>Do Not Disturb</p>
+   
+      <figure>
+        <img src="pics/00-main.png" alt="AICrypto promotional comic" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- Contact / Footer -->
+  <footer id="contact" class="footer">
+    <div class="container footer-inner">
+      <p>For inquiries, please contact <a href="mailto:yuuwwang@example.com">yuuwwang@gmail.com</a>.</p>
+    </div>
+  </footer>
+
+  <script>
+    async function initLeaderboard() {
+      try {
+        const response = await fetch('leader.json');
+        const data = await response.json();
+        
+        // Sort models by total score (descending)
+        const sortedModels = Object.entries(data)
+          .sort((a, b) => b[1].total - a[1].total)
+          .map(([name, scores]) => ({ name, ...scores }));
+
+        // For ECharts y-axis, the first element is at the bottom, so we reverse the array
+        // to have the best model at the top.
+        const reversedModels = [...sortedModels].reverse();
+
+        // Prepare data for ECharts
+        const modelNames = reversedModels.map(model => model.name);
+        const mcqData = reversedModels.map(model => (model.mcq * 100).toFixed(1)); // Convert to percentage
+        const ctfData = reversedModels.map(model => (model.ctf * 100).toFixed(1));
+        const proofData = reversedModels.map(model => (model.proof * 100).toFixed(1));
+
+        // Initialize ECharts
+        const chartDom = document.getElementById('leaderboard-chart');
+        const myChart = echarts.init(chartDom);
+
+        const option = {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            },
+            formatter: function(params) {
+              let result = `<strong>${params[0].name}</strong><br/>`;
+              let total = 0;
+              params.forEach(param => {
+                result += `${param.marker} ${param.seriesName}: ${param.value}%<br/>`;
+                total += parseFloat(param.value);
+              });
+              result += `<strong>Total: ${total.toFixed(1)}%</strong>`;
+              return result;
+            }
+          },
+          legend: {
+            data: ['MCQ', 'CTF', 'Proof'],
+            top: 'top',
+            textStyle: {
+              fontSize: 14,
+              fontFamily: 'Inter, sans-serif'
+            }
+          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            max: 300,
+            axisLabel: {
+              formatter: '{value}',
+              fontSize: 12,
+              fontFamily: 'Inter, sans-serif'
+            },
+            splitLine: {
+              lineStyle: {
+                color: '#e9e9e9'
+              }
+            }
+          },
+          yAxis: {
+            type: 'category',
+            data: modelNames,
+            axisLabel: {
+              fontSize: 14,
+              fontFamily: 'Inter, sans-serif',
+              color: '#333'
+            },
+            axisTick: { show: false },
+            axisLine: { show: false }
+          },
+          series: [
+            {
+              name: 'MCQ',
+              type: 'bar',
+              stack: 'total',
+              label: { 
+                show: true,
+                position: 'inside',
+                formatter: '{c}',
+                color: '#fff',
+                fontSize: 10,
+                fontFamily: 'Inter, sans-serif'
+              },
+              emphasis: { focus: 'series' },
+              itemStyle: { color: '#3B8EA5' },
+              data: mcqData
+            },
+            {
+              name: 'CTF',
+              type: 'bar',
+              stack: 'total',
+              label: { 
+                show: true,
+                position: 'inside',
+                formatter: '{c}',
+                color: '#fff',
+                fontSize: 10,
+                fontFamily: 'Inter, sans-serif'
+              },
+              emphasis: { focus: 'series' },
+              itemStyle: { color: '#E29A38' },
+              data: ctfData
+            },
+            {
+              name: 'Proof',
+              type: 'bar',
+              stack: 'total',
+              label: { 
+                show: true,
+                position: 'inside',
+                formatter: '{c}',
+                color: '#fff',
+                fontSize: 10,
+                fontFamily: 'Inter, sans-serif'
+              },
+              emphasis: { focus: 'series' },
+              itemStyle: { color: '#6A4C93' },
+              data: proofData
+            }
+          ],
+          textStyle: {
+            fontFamily: 'Inter, sans-serif'
+          }
+        };
+
+        myChart.setOption(option);
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+          myChart.resize();
+        });
+
+      } catch (err) {
+        console.error('Failed to load leaderboard:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initLeaderboard);
+
+    /* CTF Matrix Script */
+    async function initCTFMatrix() {
+      // Get models from leaderboard and filter for available CTF results
+      const leaderboardData = await (await fetch('leader.json')).json();
+      const allModels = Object.keys(leaderboardData);
+
+      async function fetchModelResults(model) {
+        const path = `CTF/ctf_${model}_task_results.json`;
+        try {
+          const res = await fetch(path);
+          if (!res.ok) throw new Error('not found');
+          return res.json();
+        } catch {
+          console.warn('Missing CTF result for', model);
+          return null;
+        }
+      }
+
+      // Fetch all results in parallel
+      const modelData = await Promise.all(allModels.map(async m => ({
+        model: m,
+        results: await fetchModelResults(m)
+      })));
+
+      // Filter out models without CTF data and get challenges list
+      const firstValid = modelData.find(md => md.results);
+      if (!firstValid) return;
+      const challenges = Object.keys(firstValid.results).sort();
+
+      // Compute solved counts, filter valid models, and sort by performance
+      const validModels = modelData.filter(md => md.results).map(md => {
+        const solved = Object.values(md.results).filter(Boolean).length;
+        const total = Object.keys(md.results).length;
+        const successRate = solved / total;
+        return { ...md, solved, total, successRate };
+      });
+
+      // Sort by success rate descending, then by total solved
+      validModels.sort((a, b) => {
+        if (b.successRate !== a.successRate) return b.successRate - a.successRate;
+        return b.solved - a.solved;
+      });
+
+      // Build header row with better challenge naming
+      const table = document.getElementById('ctf-matrix-table');
+      table.innerHTML = ''; // Clear existing content
+      const headerRow = document.createElement('tr');
+      headerRow.innerHTML = `<th>Model</th>` + challenges.map(ch => {
+        const parts = ch.split('/');
+        if (parts.length >= 2) {
+          const category = parts[0]; // e.g., "01-Classic"
+          const challenge = parts[1]; // e.g., "01-greek-cipher"
+          // Show full challenge name for complete visibility
+          const displayName = `${category}/${challenge}`;
+          return `<th class="challenge-header" title="${ch}">${displayName}</th>`;
+        } else {
+          // Fallback for unexpected format
+          return `<th class="challenge-header" title="${ch}">${ch}</th>`;
+        }
+      }).join('');
+      table.appendChild(headerRow);
+
+      // Add model rows with better styling
+      for (const { model, results, solved, total, successRate } of validModels) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td class="matrix-model" title="Solved: ${solved}/${total} (${(successRate*100).toFixed(1)}%)">${model}</td>` +
+          challenges.map(ch => {
+            const val = results[ch];
+            if (val === true) {
+              return `<td class="matrix-cell" title="${ch}: Solved"><span style="color: #28a745; font-weight: bold;">✓</span></td>`;
+            } else if (val === false) {
+              return `<td class="matrix-cell" title="${ch}: Failed"><span style="color: #dc3545; font-weight: bold;">✗</span></td>`;
+            } else {
+              return `<td class="matrix-cell" title="${ch}: No data"><span style="color: #6c757d;">-</span></td>`;
+            }
+          }).join('');
+        table.appendChild(row);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCTFMatrix);
+
+    /* MCQ Heatmap Script */
+    async function initMCQHeatmap() {
+      try {
+        const response = await fetch('mcq_categorized_accuracy.json');
+        const dataJson = await response.json();
+
+        // Convert to sortable array by total descending
+        const modelsArr = Object.entries(dataJson)
+          .sort((a,b)=> b[1].total - a[1].total)
+          .map(([name, vals])=>({name, ...vals}));
+
+        // For heatmap, reverse the array so highest scoring models appear at top
+        const reversedModels = [...modelsArr].reverse();
+
+        const categories = ['math','classic','symmetric','asymmetric','misc','total'];
+
+        // Build heatmap data [catIndex, modelIndex, valuePercent]
+        const heatData = [];
+        reversedModels.forEach((model, mIdx)=>{
+          categories.forEach((cat, cIdx)=>{
+            const val = (model[cat]*100).toFixed(1);
+            heatData.push([cIdx, mIdx, parseFloat(val)]);
+          });
+        });
+
+        const chartDom = document.getElementById('mcq-heatmap-chart');
+        const myChart = echarts.init(chartDom);
+
+        const option = {
+          title: {
+            text: 'MCQ Categorized Accuracy Heatmap',
+            left: 'center',
+            top: '2%',
+            textStyle: {
+              fontSize: 18,
+              fontWeight: 'bold',
+              fontFamily: 'Inter, sans-serif'
+            }
+          },
+          tooltip:{
+            position:'top',
+            formatter: params=>{
+              const model = reversedModels[params.data[1]].name;
+              const cat = categories[params.data[0]];
+              return `<strong>${model}</strong><br/>${cat}: ${params.data[2]}%`;
+            }
+          },
+          grid:{
+            height:'75%',
+            top:'8%',
+            left:'20%'
+          },
+          xAxis:{
+            type:'category',
+            data: categories.map(c=>c.charAt(0).toUpperCase()+c.slice(1)),
+            splitArea:{show:true},
+            axisLabel:{fontWeight:'bold',color:'#000'},
+            position:'top'
+          },
+          yAxis:{
+            type:'category',
+            data: reversedModels.map(m=>m.name),
+            splitArea:{show:true},
+            axisLabel:{
+              fontWeight:'bold',
+              color:'#000',
+              interval:0
+            }
+          },
+          visualMap:{
+            min:70,
+            max:100,
+            calculable:true,
+            orient:'horizontal',
+            left:'center',
+            bottom:'5%',
+            inRange:{
+              color:['#509e90', '#3d8e8e', '#2a7d8c', '#1d6c8a', '#1f5985', '#27457c', '#2c3172']
+            }
+          },
+          series:[{
+            name:'Accuracy',
+            type:'heatmap',
+            data: heatData,
+            label:{
+              show:true,
+              color:'#ffffff',
+              fontWeight:'bold',
+              fontSize:12,
+              formatter: params=> params.data[2] + '%' 
+            },
+            emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.5)'}}
+          }]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize',()=>myChart.resize());
+
+      } catch(err){
+        console.error('Failed to load MCQ heatmap',err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initMCQHeatmap);
+
+    /* CTF Heatmap Script */
+    async function initCTFHeatmap() {
+      try {
+        const response = await fetch('ctf_cateforized_sr.json');
+        const dataJson = await response.json();
+
+        // Convert to sortable array by Total descending
+        const modelsArr = Object.entries(dataJson)
+          .sort((a,b)=> b[1].Total - a[1].Total)
+          .map(([name, vals])=>({name, ...vals}));
+
+        // For heatmap, reverse the array so highest scoring models appear at top
+        const reversedModels = [...modelsArr].reverse();
+
+        const categories = ['Classic','Block-PRNG-Hash','RSA','DLP','Lattice','ECC','Homemade','Others','Total'];
+
+        // Build heatmap data [catIndex, modelIndex, valuePercent]
+        const heatData = [];
+        reversedModels.forEach((model, mIdx)=>{
+          categories.forEach((cat, cIdx)=>{
+            const val = (model[cat]*100).toFixed(1);
+            heatData.push([cIdx, mIdx, parseFloat(val)]);
+          });
+        });
+
+        const chartDom = document.getElementById('ctf-heatmap-chart');
+        const myChart = echarts.init(chartDom);
+
+        const option = {
+          title: {
+            text: 'CTF Categorized Success Rates Heatmap',
+            left: 'center',
+            top: '2%',
+            textStyle: {
+              fontSize: 18,
+              fontWeight: 'bold',
+              fontFamily: 'Inter, sans-serif'
+            }
+          },
+          tooltip:{
+            position:'top',
+            formatter: params=>{
+              const model = reversedModels[params.data[1]].name;
+              const cat = categories[params.data[0]];
+              return `<strong>${model}</strong><br/>${cat}: ${params.data[2]}%`;
+            }
+          },
+          grid:{
+            height:'75%',
+            top:'8%',
+            left:'20%'
+          },
+          xAxis:{
+            type:'category',
+            data: categories,
+            splitArea:{show:true},
+            axisLabel:{
+              fontWeight:'bold',
+              color:'#000',
+              interval:0,
+              rotate:0,
+              fontSize:11
+            },
+            position:'top'
+          },
+          yAxis:{
+            type:'category',
+            data: reversedModels.map(m=>m.name),
+            splitArea:{show:true},
+            axisLabel:{
+              fontWeight:'bold',
+              color:'#000',
+              interval:0
+            }
+          },
+          visualMap:{
+            min:0,
+            max:100,
+            calculable:true,
+            orient:'horizontal',
+            left:'center',
+            bottom:'5%',
+            inRange:{
+              color:['#509e90', '#3d8e8e', '#2a7d8c', '#1d6c8a', '#1f5985', '#27457c', '#2c3172']
+            }
+          },
+          series:[{
+            name:'Success Rate',
+            type:'heatmap',
+            data: heatData,
+            label:{
+              show:true,
+              color:'#ffffff',
+              fontWeight:'bold',
+              fontSize:12,
+              formatter: params=> params.data[2] + '%' 
+            },
+            emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.5)'}}
+          }]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize',()=>myChart.resize());
+
+      } catch(err){
+        console.error('Failed to load CTF heatmap',err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCTFHeatmap);
+
+    /* Proof Heatmap Script */
+    async function initProofHeatmap() {
+      try {
+        const response = await fetch('proof_scoring_rate.json');
+        const dataJson = await response.json();
+
+        // Convert to sortable array by total descending
+        const modelsArr = Object.entries(dataJson)
+          .sort((a,b)=> b[1].total - a[1].total)
+          .map(([name, vals])=>({name, ...vals}));
+
+        // For heatmap, reverse the array so highest scoring models appear at top
+        const reversedModels = [...modelsArr].reverse();
+
+        const categories = ['FUN','PR','ENC','SIGNATURE','total'];
+
+        // Build heatmap data [catIndex, modelIndex, valuePercent]
+        const heatData = [];
+        reversedModels.forEach((model, mIdx)=>{
+          categories.forEach((cat, cIdx)=>{
+            const val = model[cat].toFixed(1);
+            heatData.push([cIdx, mIdx, parseFloat(val)]);
+          });
+        });
+
+        const chartDom = document.getElementById('proof-heatmap-chart');
+        const myChart = echarts.init(chartDom);
+
+        const option = {
+          title: {
+            text: 'Proof Categorized Scores Heatmap',
+            left: 'center',
+            top: '2%',
+            textStyle: {
+              fontSize: 18,
+              fontWeight: 'bold',
+              fontFamily: 'Inter, sans-serif'
+            }
+          },
+          tooltip:{
+            position:'top',
+            formatter: params=>{
+              const model = reversedModels[params.data[1]].name;
+              const cat = categories[params.data[0]];
+              return `<strong>${model}</strong><br/>${cat}: ${params.data[2]}%`;
+            }
+          },
+          grid:{
+            height:'70%',
+            top:'12%',
+            left:'20%'
+          },
+          xAxis:{
+            type:'category',
+            data: categories.map(c=>c.charAt(0).toUpperCase()+c.slice(1)),
+            splitArea:{show:true},
+            axisLabel:{
+              fontWeight:'bold',
+              color:'#000',
+              interval:0,
+              rotate:0,
+              fontSize:11
+            },
+            position:'top'
+          },
+          yAxis:{
+            type:'category',
+            data: reversedModels.map(m=>m.name),
+            splitArea:{show:true},
+            axisLabel:{
+              fontWeight:'bold',
+              color:'#000',
+              interval:0
+            }
+          },
+          visualMap:{
+            min:0,
+            max:100,
+            calculable:true,
+            orient:'horizontal',
+            left:'center',
+            bottom:'5%',
+            inRange:{
+              color:['#509e90', '#3d8e8e', '#2a7d8c', '#1d6c8a', '#1f5985', '#27457c', '#2c3172']
+            }
+          },
+          series:[{
+            name:'Score',
+            type:'heatmap',
+            data: heatData,
+            label:{
+              show:true,
+              color:'#ffffff',
+              fontWeight:'bold',
+              fontSize:12,
+              formatter: params=> params.data[2] + '%' 
+            },
+            emphasis:{itemStyle:{shadowBlur:10,shadowColor:'rgba(0,0,0,0.5)'}}
+          }]
+        };
+
+        myChart.setOption(option);
+        window.addEventListener('resize',()=>myChart.resize());
+
+      } catch(err){
+        console.error('Failed to load Proof heatmap',err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initProofHeatmap);
+
+    /* MCQ Sample Script */
+    async function initMCQSample() {
+      try {
+        const response = await fetch('question_example.json');
+        const questions = await response.json();
+
+        const container = document.getElementById('mcq-quiz');
+        if (!container) return;
+
+        questions.forEach((q, idx) => {
+          const qDiv = document.createElement('div');
+          qDiv.className = 'mcq-question';
+
+          // Question text
+          const qText = document.createElement('p');
+          qText.innerHTML = `<strong>Q${idx + 1}.</strong> ${q.question}`;
+          qDiv.appendChild(qText);
+
+          const isMulti = q.answer.length > 1;
+          const list = document.createElement('ul');
+          list.style.listStyle = 'none';
+          list.style.padding = '0';
+
+          q.choice.forEach((choiceTxt, cIdx) => {
+            const li = document.createElement('li');
+            li.style.marginBottom = '4px';
+
+            const input = document.createElement('input');
+            input.type = isMulti ? 'checkbox' : 'radio';
+            input.name = `q${idx}`;
+            input.value = cIdx;
+            input.id = `q${idx}_${cIdx}`;
+
+            const label = document.createElement('label');
+            label.htmlFor = input.id;
+            label.innerHTML = ` ${String.fromCharCode(65 + cIdx)}. ${choiceTxt}`;
+
+            li.appendChild(input);
+            li.appendChild(label);
+            list.appendChild(li);
+          });
+
+          qDiv.appendChild(list);
+
+          const btn = document.createElement('button');
+          btn.textContent = 'Check Answer';
+          btn.style.marginTop = '6px';
+
+          const resultSpan = document.createElement('span');
+          resultSpan.style.marginLeft = '10px';
+
+          btn.addEventListener('click', () => {
+            const selected = Array.from(list.querySelectorAll('input'))
+              .filter(chk => chk.checked)
+              .map(chk => parseInt(chk.value));
+
+            const correct = q.answer;
+            const isCorrect = selected.length === correct.length && selected.every(v => correct.includes(v));
+
+            if (isCorrect) {
+              resultSpan.textContent = '✔ Correct!';
+              resultSpan.style.color = 'green';
+            } else {
+              const ansStr = correct.map(i => String.fromCharCode(65 + i)).join(', ');
+              resultSpan.textContent = `✘ Incorrect. Correct answer: ${ansStr}`;
+              resultSpan.style.color = 'red';
+            }
+
+            // Re-render MathJax after dynamic content update
+            if (window.MathJax && MathJax.typesetPromise) {
+              MathJax.typesetPromise();
+            }
+          });
+
+          qDiv.appendChild(btn);
+          qDiv.appendChild(resultSpan);
+          qDiv.style.marginBottom = '1rem';
+
+          container.appendChild(qDiv);
+        });
+
+        // Initial MathJax render
+        if (window.MathJax && MathJax.typesetPromise) {
+          MathJax.typesetPromise();
+        }
+
+      } catch (err) {
+        console.error('Failed to load MCQ sample:', err);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initMCQSample);
+
+    /* CTF Challenges Script */
+    function initCTFChallenges() {
+      const challenges = [
+        {
+          id: 1,
+          title: "RSA School 3rd Grade",
+          description: "This challenge from Blue-hens-2023 https://ctftime.org/event/2126/. You can also download the challenge files below.",
+          flagMd5: "6229ad0d27cd21b861c117b6d0554bc9", // MD5 of correct flag
+          downloadLink: "challenge1.zip", // Add download link
+          codeBlocks: [
+            {
+              caption: "main.py",
+              language: "python",
+              code: `from Crypto.Util.number import *
+p=getPrime(512)
+q=getPrime(512)
+n=p*q
+e1=71
+e2=101
+msg=bytes_to_long(b'UDCTF{REDACTED}')
+c1 = pow(msg, e1, n)
+c2 = pow(msg, e2, n)
+print(n)
+print(e1)
+print(e2)
+print(c1)
+print(c2)
+`
+            },
+            {
+              caption: "output.txt",
+              language: "text", 
+              code: `87587426608653108851564813489752475287019321764561555461700901651463446024854423042554629096780987943450742890279417241231211446818009232077230407281610183609540264821974669679932743621434901779832901512681108061652309435608446510337833028029876549629818957952682516026313018526405972829923620377438164377109
+71
+101
+1421275848974615267320815554113040672023972283807752574007971561416386636110464890632994733734995114229161525885389065244354678964389211537085513310823751266472044865745324866096898051759507738772227296453397678055024824805366251635154522059070310922367078281343183508274450904681187384450253350434931649011
+26097095086985946477598349002260598942399303275420948828501512467473619292573670218058274201990116295246084096584962695127706609264424951086000719935218496250047555039460733768633688410770610612614744411304261153778159881980276162174277085197608466835857196307432992312260307797540746411319330318058866868362
+`
+            },
+            {
+              caption: "helper.py (LLM only)",
+              language: "python", 
+              code: `n=87587426608653108851564813489752475287019321764561555461700901651463446024854423042554629096780987943450742890279417241231211446818009232077230407281610183609540264821974669679932743621434901779832901512681108061652309435608446510337833028029876549629818957952682516026313018526405972829923620377438164377109
+e1=71
+e2=101
+c1=1421275848974615267320815554113040672023972283807752574007971561416386636110464890632994733734995114229161525885389065244354678964389211537085513310823751266472044865745324866096898051759507738772227296453397678055024824805366251635154522059070310922367078281343183508274450904681187384450253350434931649011
+c2=26097095086985946477598349002260598942399303275420948828501512467473619292573670218058274201990116295246084096584962695127706609264424951086000719935218496250047555039460733768633688410770610612614744411304261153778159881980276162174277085197608466835857196307432992312260307797540746411319330318058866868362
+`
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: "Naptime",
+          description: "This challenge from UIUCTF-2024 https://2024.uiuc.tf/. The code is too long to display here, please download the challenge files to get started.",
+          flagMd5: "2d788ccd1db49eca46d21b2fb207241b", // MD5 of "test"
+          downloadLink: "challenge2.zip", // Add download link only
+          codeBlocks: [] // No code blocks for this challenge
+        }
+      ];
+
+      const container = document.getElementById('ctf-challenges');
+      if (!container) return;
+
+      challenges.forEach(challenge => {
+        const challengeDiv = document.createElement('div');
+        challengeDiv.className = 'ctf-challenge';
+
+        // Challenge header
+        const header = document.createElement('div');
+        header.className = 'challenge-header';
+        header.innerHTML = `
+          <h3>Challenge ${challenge.id}: ${challenge.title}</h3>
+          <p class="challenge-description">${challenge.description}</p>
+        `;
+        challengeDiv.appendChild(header);
+
+        // Code blocks
+        const codeContainer = document.createElement('div');
+        codeContainer.className = 'code-block-container';
+        
+        challenge.codeBlocks.forEach(block => {
+          const codeBlock = document.createElement('div');
+          codeBlock.className = 'code-block';
+          codeBlock.innerHTML = `
+            <div class="code-caption">${block.caption}</div>
+            <pre class="code-scroll"><code class="language-${block.language}">${block.code}</code></pre>
+          `;
+          codeContainer.appendChild(codeBlock);
+        });
+        
+        challengeDiv.appendChild(codeContainer);
+
+        // Download link if available
+        if (challenge.downloadLink) {
+          const downloadDiv = document.createElement('div');
+          downloadDiv.className = 'download-section';
+          downloadDiv.innerHTML = `
+            <div class="download-link">
+              <a href="${challenge.downloadLink}" download>
+                <button class="download-btn">📁 Download Challenge Files</button>
+              </a>
+            </div>
+          `;
+          challengeDiv.appendChild(downloadDiv);
+        }
+
+        // Flag submission
+        const flagDiv = document.createElement('div');
+        flagDiv.className = 'flag-submission';
+        flagDiv.innerHTML = `
+          <div class="flag-input-group">
+            <label for="flag-${challenge.id}">Submit Flag:</label>
+            <input type="text" id="flag-${challenge.id}" placeholder="Enter flag here..." />
+            <button onclick="submitFlag(${challenge.id}, '${challenge.flagMd5}')">Submit</button>
+            <span id="result-${challenge.id}" class="flag-result"></span>
+          </div>
+        `;
+        challengeDiv.appendChild(flagDiv);
+
+        container.appendChild(challengeDiv);
+      });
+
+      // Apply syntax highlighting
+      if (typeof Prism !== 'undefined') {
+        Prism.highlightAll();
+      }
+    }
+
+    function submitFlag(challengeId, correctMd5) {
+      const input = document.getElementById(`flag-${challengeId}`);
+      const result = document.getElementById(`result-${challengeId}`);
+      const userFlag = input.value.trim();
+      
+      if (!userFlag) {
+        result.textContent = 'Please enter a flag';
+        result.className = 'flag-result error';
+        return;
+      }
+
+      // Calculate MD5 of user input
+      const userMd5 = CryptoJS.MD5(userFlag).toString();
+      
+      if (userMd5 === correctMd5) {
+        result.textContent = '✓ Correct! Well done!';
+        result.className = 'flag-result success';
+        input.disabled = true;
+      } else {
+        result.textContent = '✗ Incorrect flag. Try again!';
+        result.className = 'flag-result error';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initCTFChallenges);
+
+  </script>
+</body>
+</html> 
