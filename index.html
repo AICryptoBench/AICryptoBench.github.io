@@ -87,13 +87,18 @@
         <img src="pics/logo.jpg" alt="AICrypto Icon" />
         <span>AICrypto</span>
       </a>
+      <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
       <nav>
-        <ul>
-          <li><a href="#overview">Overview</a></li>
-          <li><a href="#results">Results</a></li>
-          <li><a href="#mcq-sample">Samples</a></li>
-          <li><a href="#future">Future Work</a></li>
-          <li><a href="#contact">Contact</a></li>
+        <ul id="mobile-menu">
+          <li><a href="#overview" onclick="closeMobileMenu()">Overview</a></li>
+          <li><a href="#results" onclick="closeMobileMenu()">Results</a></li>
+          <li><a href="#mcq-sample" onclick="closeMobileMenu()">Samples</a></li>
+          <li><a href="#future" onclick="closeMobileMenu()">Future Work</a></li>
+          <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -138,7 +143,7 @@
           <img src="pics/github-mark-white.svg" alt="GitHub Logo" />
           <span>Code</span>
         </a>
-        <a class="resource-link" href="https://huggingface.co/datasets/username/AICrypto" target="_blank" rel="noopener">
+        <a class="resource-link" href="https://huggingface.co/datasets/yuuwwang/aicrypto/tree/main" target="_blank" rel="noopener">
           <img src="pics/huggingface_logo-noborder.svg" alt="Hugging Face Logo" />
           <span>Dataset</span>
         </a>
@@ -150,6 +155,11 @@
   <section id="news" class="section news">
     <div class="container">
       <h2>📢 News</h2>
+      <div class="news-item">
+        <p>
+          <strong>July 22, 2025 - 🎉 Dataset Released:</strong> We are excited to announce that the AICrypto dataset is now publicly available on <a href="https://huggingface.co/datasets/yuuwwang/aicrypto/tree/main" target="_blank" rel="noopener">Hugging Face</a>! Thank you for your patience.
+        </p>
+      </div>
       <div class="news-item">
         <p>
           <strong>July 15, 2025 - 🚀 Coming Soon:</strong> We are currently making our best efforts to organize the dataset and evaluation framework. We plan to release the complete benchmark dataset and evaluation code as open source as soon as possible. We appreciate your patience and interest!
@@ -380,6 +390,34 @@ $h:\{0,1\}^n\!\rightarrow\!\{0,1\}$, no universal hardcore bit exists. \qed</cod
   </footer>
 
   <script>
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      
+      menu.classList.toggle('mobile-menu-open');
+      toggle.classList.toggle('active');
+    }
+    
+    function closeMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      
+      menu.classList.remove('mobile-menu-open');
+      toggle.classList.remove('active');
+    }
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const navbar = document.querySelector('.navbar');
+      const menu = document.getElementById('mobile-menu');
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      
+      if (!navbar.contains(event.target) && menu.classList.contains('mobile-menu-open')) {
+        closeMobileMenu();
+      }
+    });
+
     async function initLeaderboard() {
       try {
         const response = await fetch('leader.json');
@@ -521,6 +559,39 @@ $h:\{0,1\}^n\!\rightarrow\!\{0,1\}$, no universal hardcore bit exists. \qed</cod
         window.addEventListener('resize', function() {
           myChart.resize();
         });
+
+        // Mobile optimization
+        function updateChartForMobile() {
+          if (window.innerWidth <= 768) {
+            const mobileOption = {
+              ...option,
+              grid: {
+                left: '5%',
+                right: '8%',
+                bottom: '8%',
+                containLabel: true
+              },
+              yAxis: {
+                ...option.yAxis,
+                axisLabel: {
+                  ...option.yAxis.axisLabel,
+                  fontSize: 10
+                }
+              },
+              series: option.series.map(s => ({
+                ...s,
+                label: {
+                  ...s.label,
+                  fontSize: 8
+                }
+              }))
+            };
+            myChart.setOption(mobileOption);
+          }
+        }
+        
+        updateChartForMobile();
+        window.addEventListener('resize', updateChartForMobile);
 
       } catch (err) {
         console.error('Failed to load leaderboard:', err);
@@ -707,7 +778,49 @@ $h:\{0,1\}^n\!\rightarrow\!\{0,1\}$, no universal hardcore bit exists. \qed</cod
         };
 
         myChart.setOption(option);
-        window.addEventListener('resize',()=>myChart.resize());
+        
+        // Mobile optimization for MCQ heatmap
+        function updateMCQHeatmapForMobile() {
+          if (window.innerWidth <= 768) {
+            const mobileOption = {
+              ...option,
+              grid: {
+                height: '70%',
+                top: '12%',
+                left: '25%'
+              },
+              xAxis: {
+                ...option.xAxis,
+                axisLabel: {
+                  ...option.xAxis.axisLabel,
+                  fontSize: 10,
+                  rotate: 45
+                }
+              },
+              yAxis: {
+                ...option.yAxis,
+                axisLabel: {
+                  ...option.yAxis.axisLabel,
+                  fontSize: 9
+                }
+              },
+              series: [{
+                ...option.series[0],
+                label: {
+                  ...option.series[0].label,
+                  fontSize: 10
+                }
+              }]
+            };
+            myChart.setOption(mobileOption);
+          }
+        }
+        
+        updateMCQHeatmapForMobile();
+        window.addEventListener('resize', () => {
+          myChart.resize();
+          updateMCQHeatmapForMobile();
+        });
 
       } catch(err){
         console.error('Failed to load MCQ heatmap',err);
@@ -818,7 +931,49 @@ $h:\{0,1\}^n\!\rightarrow\!\{0,1\}$, no universal hardcore bit exists. \qed</cod
         };
 
         myChart.setOption(option);
-        window.addEventListener('resize',()=>myChart.resize());
+        
+        // Mobile optimization for CTF heatmap
+        function updateCTFHeatmapForMobile() {
+          if (window.innerWidth <= 768) {
+            const mobileOption = {
+              ...option,
+              grid: {
+                height: '70%',
+                top: '12%',
+                left: '25%'
+              },
+              xAxis: {
+                ...option.xAxis,
+                axisLabel: {
+                  ...option.xAxis.axisLabel,
+                  fontSize: 9,
+                  rotate: 45
+                }
+              },
+              yAxis: {
+                ...option.yAxis,
+                axisLabel: {
+                  ...option.yAxis.axisLabel,
+                  fontSize: 9
+                }
+              },
+              series: [{
+                ...option.series[0],
+                label: {
+                  ...option.series[0].label,
+                  fontSize: 10
+                }
+              }]
+            };
+            myChart.setOption(mobileOption);
+          }
+        }
+        
+        updateCTFHeatmapForMobile();
+        window.addEventListener('resize', () => {
+          myChart.resize();
+          updateCTFHeatmapForMobile();
+        });
 
       } catch(err){
         console.error('Failed to load CTF heatmap',err);
@@ -929,7 +1084,49 @@ $h:\{0,1\}^n\!\rightarrow\!\{0,1\}$, no universal hardcore bit exists. \qed</cod
         };
 
         myChart.setOption(option);
-        window.addEventListener('resize',()=>myChart.resize());
+        
+        // Mobile optimization for Proof heatmap
+        function updateProofHeatmapForMobile() {
+          if (window.innerWidth <= 768) {
+            const mobileOption = {
+              ...option,
+              grid: {
+                height: '65%',
+                top: '15%',
+                left: '25%'
+              },
+              xAxis: {
+                ...option.xAxis,
+                axisLabel: {
+                  ...option.xAxis.axisLabel,
+                  fontSize: 10,
+                  rotate: 45
+                }
+              },
+              yAxis: {
+                ...option.yAxis,
+                axisLabel: {
+                  ...option.yAxis.axisLabel,
+                  fontSize: 9
+                }
+              },
+              series: [{
+                ...option.series[0],
+                label: {
+                  ...option.series[0].label,
+                  fontSize: 10
+                }
+              }]
+            };
+            myChart.setOption(mobileOption);
+          }
+        }
+        
+        updateProofHeatmapForMobile();
+        window.addEventListener('resize', () => {
+          myChart.resize();
+          updateProofHeatmapForMobile();
+        });
 
       } catch(err){
         console.error('Failed to load Proof heatmap',err);
